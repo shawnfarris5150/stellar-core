@@ -1,9 +1,9 @@
 #include "main/dumpxdr.h"
 #include "crypto/SecretKey.h"
 #include "transactions/SignatureUtils.h"
+#include "util/Decoder.h"
 #include "util/Fs.h"
 #include "util/XDRStream.h"
-#include "util/basen.h"
 #include <iostream>
 #include <regex>
 #include <xdrpp/printer.h>
@@ -111,7 +111,7 @@ readFile(const std::string& filename, bool base64 = false)
     if (base64)
     {
         string ret;
-        bn::decode_b64(input.str(), ret);
+        decoder::decode_b64(input.str(), ret);
         return ret;
     }
     else
@@ -254,7 +254,7 @@ signtxn(std::string const& filename, bool base64)
 
         auto out = xdr::xdr_to_opaque(txenv);
         if (base64)
-            cout << bn::encode_b64(out) << std::endl;
+            cout << decoder::encode_b64(out) << std::endl;
         else
             cout.write(reinterpret_cast<char*>(out.data()), out.size());
     }
