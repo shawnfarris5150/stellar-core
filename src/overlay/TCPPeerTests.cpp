@@ -19,8 +19,8 @@ namespace stellar
 TEST_CASE("TCPPeer can communicate", "[overlay]")
 {
     Hash networkID = sha256(getTestConfig().NETWORK_PASSPHRASE);
-    Simulation::pointer s =
-        std::make_shared<Simulation>(Simulation::OVER_TCP, networkID);
+    Simulation::pointer s = std::make_shared<Simulation>(
+        Simulation::OVER_TCP_WITH_REAL_CLOCK, networkID);
 
     auto v10SecretKey = SecretKey::fromSeed(sha256("v10"));
     auto v11SecretKey = SecretKey::fromSeed(sha256("v11"));

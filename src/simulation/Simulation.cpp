@@ -28,7 +28,7 @@ using namespace std;
 Simulation::Simulation(Mode mode, Hash const& networkID,
                        std::function<Config()> confGen)
     : LoadGenerator(networkID)
-    , mVirtualClockMode(mode != OVER_TCP)
+    , mVirtualClockMode(mode != OVER_TCP_WITH_REAL_CLOCK)
     , mClock(mVirtualClockMode ? VirtualClock::VIRTUAL_TIME
                                : VirtualClock::REAL_TIME)
     , mMode(mode)
@@ -206,7 +206,7 @@ Simulation::dropLoopbackConnection(NodeID initiator, NodeID acceptor)
 void
 Simulation::addTCPConnection(NodeID initiator, NodeID acceptor)
 {
-    if (mMode != OVER_TCP)
+    if (mMode == OVER_LOOPBACK)
     {
         throw runtime_error("Cannot add a TCP connection");
     }

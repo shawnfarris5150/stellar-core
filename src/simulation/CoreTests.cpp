@@ -66,7 +66,7 @@ TEST_CASE("3 nodes. 2 running. threshold 2", "[simulation][core3]")
 
     SECTION("Over tcp")
     {
-        mode = Simulation::OVER_TCP;
+        mode = Simulation::OVER_TCP_WITH_REAL_CLOCK;
     }
 
     {
@@ -122,7 +122,7 @@ TEST_CASE("core topology: 4 ledgers at scales 2..4", "[simulation]")
     }
     SECTION("Over tcp")
     {
-        mode = Simulation::OVER_TCP;
+        mode = Simulation::OVER_TCP_WITH_REAL_CLOCK;
     }
 
     Hash networkID = sha256(getTestConfig().NETWORK_PASSPHRASE);
@@ -282,7 +282,7 @@ TEST_CASE("hierarchical topology scales 1..3", "[simulation]")
     SECTION("Over tcp")
     {
         LOG(DEBUG) << "OVER_TCP";
-        mode = Simulation::OVER_TCP;
+        mode = Simulation::OVER_TCP_WITH_REAL_CLOCK;
         test();
     }
 }
@@ -320,7 +320,7 @@ TEST_CASE("core-nodes with outer nodes", "[simulation]")
     }
     SECTION("Over tcp")
     {
-        mode = Simulation::OVER_TCP;
+        mode = Simulation::OVER_TCP_WITH_REAL_CLOCK;
         hierarchicalSimplifiedTest(4, 5, 10, mode, networkID);
     }
 }

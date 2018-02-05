@@ -176,8 +176,9 @@ TEST_CASE("Flooding", "[flood][overlay]")
             }
             SECTION("tcp")
             {
-                simulation = Topologies::core(4, .666f, Simulation::OVER_TCP,
-                                              networkID, cfgGen);
+                simulation = Topologies::core(
+                    4, .666f, Simulation::OVER_TCP_WITH_VIRTUAL_CLOCK,
+                    networkID, cfgGen);
                 test(injectTransaction, ackedTransactions);
             }
         }
@@ -193,7 +194,8 @@ TEST_CASE("Flooding", "[flood][overlay]")
             SECTION("tcp")
             {
                 simulation = Topologies::hierarchicalQuorumSimplified(
-                    5, 10, Simulation::OVER_TCP, networkID, cfgGen);
+                    5, 10, Simulation::OVER_TCP_WITH_VIRTUAL_CLOCK, networkID,
+                    cfgGen);
                 test(injectTransaction, ackedTransactions);
             }
         }
@@ -224,6 +226,7 @@ TEST_CASE("Flooding", "[flood][overlay]")
             txSet.add(tx1);
             txSet.sortForHash();
             auto& herder = inApp->getHerder();
+            auto& pendingEnvelopes = herder.getPendingEnvelopes();
 
             // build the quorum set used by this message
             // use sources as validators
@@ -255,10 +258,11 @@ TEST_CASE("Flooding", "[flood][overlay]")
                     inApp->getNetworkID(), ENVELOPE_TYPE_SCP, st));
 
             // inject the message
+            pendingEnvelopes.addTxSet(txSet.getContentsHash(), st.slotIndex,
+                                      std::make_shared<TxSetFrame>(txSet));
+            pendingEnvelopes.addSCPQuorumSet(qSetHash, qset);
             REQUIRE(herder.recvSCPEnvelope(envelope) ==
-                    Herder::ENVELOPE_STATUS_FETCHING);
-            REQUIRE(herder.recvTxSet(txSet.getContentsHash(), txSet));
-            REQUIRE(herder.recvSCPQuorumSet(qSetHash, qset));
+                    Herder::ENVELOPE_STATUS_READY);
 
         };
 
@@ -299,8 +303,9 @@ TEST_CASE("Flooding", "[flood][overlay]")
             }
             SECTION("tcp")
             {
-                simulation = Topologies::core(4, .666f, Simulation::OVER_TCP,
-                                              networkID, cfgGen);
+                simulation = Topologies::core(
+                    4, .666f, Simulation::OVER_TCP_WITH_VIRTUAL_CLOCK,
+                    networkID, cfgGen);
                 test(injectSCP, ackedSCP);
             }
         }
@@ -316,7 +321,8 @@ TEST_CASE("Flooding", "[flood][overlay]")
             SECTION("tcp")
             {
                 simulation = Topologies::hierarchicalQuorumSimplified(
-                    5, 10, Simulation::OVER_TCP, networkID, cfgGen);
+                    5, 10, Simulation::OVER_TCP_WITH_VIRTUAL_CLOCK, networkID,
+                    cfgGen);
                 test(injectSCP, ackedSCP);
             }
         }

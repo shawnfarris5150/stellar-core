@@ -18,6 +18,7 @@ namespace stellar
 {
 class Application;
 class Peer;
+class PendingEnvelopes;
 class XDROutputFileStream;
 
 typedef std::shared_ptr<Peer> PeerPtr;
@@ -97,6 +98,8 @@ class Herder
 
     // restores Herder's state from disk
     virtual void restoreState() = 0;
+
+    virtual PendingEnvelopes& getPendingEnvelopes() = 0;
 
     virtual bool recvSCPQuorumSet(Hash const& hash,
                                   SCPQuorumSet const& qset) = 0;

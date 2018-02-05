@@ -31,7 +31,8 @@ class Simulation : public LoadGenerator
   public:
     enum Mode
     {
-        OVER_TCP,
+        OVER_TCP_WITH_REAL_CLOCK,
+        OVER_TCP_WITH_VIRTUAL_CLOCK,
         OVER_LOOPBACK
     };
 
